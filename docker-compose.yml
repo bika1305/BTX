@@ -1,0 +1,41 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: '3.1'
+services:
+    postgres:
+        image: 'postgres:15-alpine'
+        working_dir: /application
+        volumes:
+            - '.:/application'
+        environment:
+            - POSTGRES_USER= ${DB_USER}
+            - POSTGRES_PASSWORD= ${DB_PASSWORD}
+            - POSTGRES_DB= ${DB_NAME}
+        ports:
+            - '55004:5432'
+
+    webserver:
+        image: 'nginx:alpine'
+        working_dir: /application
+        volumes:
+            - '.:/application'
+            - './phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+        ports:
+            - '55000:80'
+
+    php-fpm:
+        build: phpdocker/php-fpm
+        working_dir: /application
+        volumes:
+            - '.:/application'
+            - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.4/fpm/conf.d/99-overrides.ini'
+            - './phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.4/cli/conf.d/99-overrides.ini'
+        environment:
+              - DB_HOST=${DB_HOST}
+              - DB_PORT=${DB_PORT}
+              - DB_NAME=${DB_NAME}
+              - DB_USER=${DB_USER}
+              - DB_PASSWORD=${DB_PASSWORD}
+             # - PHP_IDE_CONFIG: "serverName=Docker"
+            

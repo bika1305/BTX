@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Docker",
+          "type": "php",
+          "request": "launch",
+          "port": 9000,
+          // Server Remote Path -> Local Project Path
+          "pathMappings": {
+              "/application/public": "${workspaceRoot}/"
+          },
+      }
+  ]
+}
